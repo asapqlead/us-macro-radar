@@ -1,6 +1,35 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ================================================================
+# US Macro Radar - Git Ignore Configuration
+# ================================================================
 
-# dependencies
+# ----------------------------------------------------------------
+# 1. Environment & Secret Credentials (CRITICAL - NEVER COMMIT)
+# ----------------------------------------------------------------
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Always allow template example file for repository cloning
+!.env.example
+
+# Security keys, certificates, tokens
+*.pem
+*.key
+*.crt
+*.cert
+*.pfx
+*.p12
+id_rsa
+id_ecdsa
+id_ed25519
+
+# ----------------------------------------------------------------
+# 2. Dependencies
+# ----------------------------------------------------------------
 /node_modules
 /.pnp
 .pnp.*
@@ -10,32 +39,71 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# ----------------------------------------------------------------
+# 3. Next.js Build Outputs & Local Caches
+# ----------------------------------------------------------------
 /.next/
 /out/
-
-# production
 /build
+/dist
+next-env.d.ts.bak
 
-# misc
-.DS_Store
-*.pem
+# ----------------------------------------------------------------
+# 4. Testing & Code Coverage
+# ----------------------------------------------------------------
+/coverage
+*.lcov
+.vitest/
 
-# debug
+# ----------------------------------------------------------------
+# 5. Logs & Debugger Dumps
+# ----------------------------------------------------------------
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# ----------------------------------------------------------------
+# 6. Operating System Artifacts
+# ----------------------------------------------------------------
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 
-# vercel
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+
+# Linux
+*~
+
+# ----------------------------------------------------------------
+# 7. IDEs & Editors
+# ----------------------------------------------------------------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.bak
+
+# ----------------------------------------------------------------
+# 8. Hosting & Tooling Caches
+# ----------------------------------------------------------------
 .vercel
-
-# typescript
 *.tsbuildinfo
-next-env.d.ts
