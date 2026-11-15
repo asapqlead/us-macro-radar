@@ -107,3 +107,15 @@ desktop.ini
 # ----------------------------------------------------------------
 .vercel
 *.tsbuildinfo
+
+# ----------------------------------------------------------------
+# 9. Agent & Development Artifacts
+# ----------------------------------------------------------------
+# Agent-specific metadata files
+.agent/*
+
+
+# Test artifacts and AI-generated drafts
+/temp/
+/drafts/
+*~
