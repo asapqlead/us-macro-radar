@@ -112,7 +112,7 @@ desktop.ini
 # 9. Agent & Development Artifacts
 # ----------------------------------------------------------------
 # Agent-specific metadata files
-.agent/*
+.agents/*
 
 
 # Test artifacts and AI-generated drafts
