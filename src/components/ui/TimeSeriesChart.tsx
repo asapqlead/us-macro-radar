@@ -14,6 +14,7 @@ import {
 import { FredObservationPoint } from "@/types/fred";
 import { MacroSeriesConfig } from "@/types/macro";
 import { cn, formatDate, formatMetricValue } from "@/lib/utils";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { Skeleton } from "./Skeleton";
 
 interface TimeSeriesChartProps {
@@ -35,6 +36,8 @@ export function TimeSeriesChart({
 }: TimeSeriesChartProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [selectedRange, setSelectedRange] = useState<TimeRange>("5Y");
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   useEffect(() => {
     setIsMounted(true);
@@ -83,7 +86,7 @@ export function TimeSeriesChart({
     return (
       <div
         className={cn(
-          "flex flex-col justify-between rounded-xl border border-zinc-800 bg-zinc-950/70 p-6",
+          "flex flex-col justify-between rounded-xl border border-zinc-200 bg-white/70 dark:border-zinc-800 dark:bg-zinc-950/70 p-6 shadow-xs",
           className
         )}
       >
@@ -99,30 +102,30 @@ export function TimeSeriesChart({
   return (
     <div
       className={cn(
-        "rounded-xl border border-zinc-800 bg-zinc-950/80 p-6 shadow-sm backdrop-blur-md",
+        "rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-950/80 dark:shadow-sm backdrop-blur-md transition-colors",
         className
       )}
     >
       {/* Header with Title and Range Picker */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-zinc-800/80">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-zinc-200/80 dark:border-zinc-800/80">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-semibold text-zinc-100">
+            <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
               {config?.name || "Historical Macroeconomic Series"}
             </h2>
             {config?.id && (
-              <span className="rounded bg-zinc-800 px-2 py-0.5 font-mono text-xs text-zinc-400">
+              <span className="rounded bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 font-mono text-xs text-zinc-700 dark:text-zinc-400">
                 {config.id}
               </span>
             )}
           </div>
-          <p className="mt-0.5 text-xs text-zinc-400">
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
             {config?.description || "Historical data powered by FRED"}
           </p>
         </div>
 
         {/* Range Buttons */}
-        <div className="flex items-center gap-1 rounded-lg bg-zinc-900/90 p-1 border border-zinc-800">
+        <div className="flex items-center gap-1 rounded-lg bg-zinc-100 p-1 border border-zinc-200 dark:bg-zinc-900/90 dark:border-zinc-800">
           {(["1Y", "3Y", "5Y", "MAX"] as TimeRange[]).map((range) => (
             <button
               key={range}
@@ -130,8 +133,8 @@ export function TimeSeriesChart({
               className={cn(
                 "rounded px-2.5 py-1 text-xs font-medium transition-colors",
                 selectedRange === range
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60 dark:text-zinc-400 dark:hover:text-zinc-200 dark:hover:bg-zinc-800/60"
               )}
             >
               {range}
@@ -143,7 +146,7 @@ export function TimeSeriesChart({
       {/* Recharts Area Container */}
       <div className="mt-6 w-full" style={{ height }}>
         {filteredData.length === 0 ? (
-          <div className="flex h-full items-center justify-center text-sm text-zinc-500">
+          <div className="flex h-full items-center justify-center text-sm text-zinc-400 dark:text-zinc-500">
             No historical data available for the selected range.
           </div>
         ) : (
@@ -157,7 +160,7 @@ export function TimeSeriesChart({
                   <stop
                     offset="5%"
                     stopColor={strokeColor}
-                    stopOpacity={0.35}
+                    stopOpacity={isDark ? 0.35 : 0.25}
                   />
                   <stop
                     offset="95%"
@@ -170,23 +173,23 @@ export function TimeSeriesChart({
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#27272a"
+                stroke={isDark ? "#27272a" : "#e4e4e7"}
               />
 
               <XAxis
                 dataKey="date"
                 tickFormatter={(val) => formatDate(val)}
-                stroke="#71717a"
-                tick={{ fill: "#71717a", fontSize: 11 }}
+                stroke={isDark ? "#71717a" : "#a1a1aa"}
+                tick={{ fill: isDark ? "#71717a" : "#71717a", fontSize: 11 }}
                 tickLine={false}
-                axisLine={{ stroke: "#3f3f46" }}
+                axisLine={{ stroke: isDark ? "#3f3f46" : "#e4e4e7" }}
                 minTickGap={40}
               />
 
               <YAxis
                 domain={[minVal, maxVal]}
-                stroke="#71717a"
-                tick={{ fill: "#71717a", fontSize: 11 }}
+                stroke={isDark ? "#71717a" : "#a1a1aa"}
+                tick={{ fill: isDark ? "#71717a" : "#71717a", fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
                 tickFormatter={(val) =>
@@ -214,18 +217,18 @@ export function TimeSeriesChart({
                   if (!active || !payload || !payload.length) return null;
                   const item = payload[0].payload as FredObservationPoint;
                   return (
-                    <div className="rounded-lg border border-zinc-700 bg-zinc-900/95 p-3 shadow-xl backdrop-blur-md">
-                      <p className="text-[11px] font-medium text-zinc-400">
+                    <div className="rounded-lg border border-zinc-200 bg-white/95 p-3 shadow-xl backdrop-blur-md dark:border-zinc-700 dark:bg-zinc-900/95">
+                      <p className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
                         {formatDate(item.date)} ({item.date})
                       </p>
-                      <p className="mt-1 font-mono text-base font-bold text-white">
+                      <p className="mt-1 font-mono text-base font-bold text-zinc-950 dark:text-white">
                         {formatMetricValue(
                           item.value,
                           config?.units,
                           config?.precision ?? 2
                         )}{" "}
                         {config?.units && config.units !== "%" && (
-                          <span className="text-xs text-zinc-400 font-normal">
+                          <span className="text-xs text-zinc-500 dark:text-zinc-400 font-normal">
                             {config.units}
                           </span>
                         )}
@@ -245,7 +248,7 @@ export function TimeSeriesChart({
                 activeDot={{
                   r: 5,
                   fill: strokeColor,
-                  stroke: "#ffffff",
+                  stroke: isDark ? "#ffffff" : "#ffffff",
                   strokeWidth: 2,
                 }}
               />
@@ -255,9 +258,9 @@ export function TimeSeriesChart({
       </div>
 
       {/* Sub-footer details */}
-      <div className="mt-4 flex flex-wrap items-center justify-between text-[11px] text-zinc-400 border-t border-zinc-800/80 pt-3">
+      <div className="mt-4 flex flex-wrap items-center justify-between text-[11px] text-zinc-500 dark:text-zinc-400 border-t border-zinc-200/80 dark:border-zinc-800/80 pt-3">
         <span>
-          Source: <strong className="text-zinc-300">{config?.source || "FRED"}</strong>
+          Source: <strong className="text-zinc-800 dark:text-zinc-300">{config?.source || "FRED"}</strong>
         </span>
         <span>
           Showing {filteredData.length} observations • Updated:{" "}
